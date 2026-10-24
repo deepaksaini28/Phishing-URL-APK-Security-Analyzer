@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f8fa">
+  <meta name="description" content="{{ description }}">
+  <title>{{ title }} | Phishing URL &amp; APK Security Analyzer</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="primary-nav" aria-label="Main navigation">
+      <a class="nav-link{% if page == 'url' %} active{% endif %}" href="{{ url_for('url_page') }}"{% if page == 'url' %} aria-current="page"{% endif %}>URL scanner</a>
+      <a class="nav-link{% if page == 'apk' %} active{% endif %}" href="{{ url_for('apk_page') }}"{% if page == 'apk' %} aria-current="page"{% endif %}>APK scanner</a>
+      <a class="nav-link{% if page == 'image' %} active{% endif %}" href="{{ url_for('image_page') }}"{% if page == 'image' %} aria-current="page"{% endif %}>Background remover</a>
+    </nav>
+  </header>
+
+  <main class="main-content">
+    <div class="intro">
+      <p class="eyebrow">{{ eyebrow }}</p>
+      <h1>{{ title }}</h1>
+      <p class="intro-copy">{{ description }}</p>
+    </div>
+
+    {% if page == "url" %}
+    <section class="tool-section" id="url" aria-labelledby="url-title">
+      <div class="section-heading">
+        <div><p class="section-kicker">01 / LINK ANALYSIS</p><h2 id="url-title">Phishing URL scanner</h2><p>Inspect URL structure without opening the link or contacting its host.</p></div>
+        <span class="privacy-tag">No browsing</span>
+      </div>
+      <form id="url-form" class="tool-form">
+        <label for="url-input">URL to inspect</label>
+        <div class="input-action">
+          <input id="url-input" name="url" type="text" maxlength="4096" placeholder="https://example.com/account" autocomplete="off" required>
+          <button class="button button-primary" type="submit"><span class="button-label">Analyze URL</span><span class="spinner" hidden></span></button>
+        </div>
+        <p class="field-hint">Analysis uses local structural signals. A result is not a safety guarantee.</p>
+      </form>
+      <div id="url-result" class="result-slot" aria-live="polite"></div>
+    </section>
+    {% elif page == "apk" %}
+
+    <section class="tool-section" id="apk" aria-labelledby="apk-title">
+      <div class="section-heading">
+        <div><p class="section-kicker">02 / ANDROID ANALYSIS</p><h2 id="apk-title">APK security scanner</h2><p>Review an app package without installing or executing it.</p></div>
+        <span class="privacy-tag">Static inspection</span>
+      </div>
+      <form id="apk-form" class="tool-form">
+        <label class="drop-zone" for="apk-input">
+          <span class="upload-icon" aria-hidden="true">↑</span>
+          <strong id="apk-file-name">Choose an APK file</strong>
+          <span>APK format · up to 100 MB</span>
+          <input id="apk-input" type="file" accept=".apk,application/vnd.android.package-archive" required>
+        </label>
+        <div class="form-actions">
+          <p class="field-hint">Manifest, permissions, archive and signing metadata. Uploaded file is temporary.</p>
+          <button class="button button-primary" type="submit"><span class="button-label">Inspect APK</span><span class="spinner" hidden></span></button>
+        </div>
+      </form>
+      <div id="apk-result" class="result-slot" aria-live="polite"></div>
+    </section>
+    {% else %}
+
+    <section class="tool-section" id="image" aria-labelledby="image-title">
+      <div class="section-heading">
+        <div><p class="section-kicker">03 / IMAGE UTILITY</p><h2 id="image-title">Image background remover</h2><p>Send an image to remove.bg with your consent and download a transparent PNG.</p></div>
+        <span class="privacy-tag">Optional tool</span>
+      </div>
+      <form id="image-form" class="tool-form">
+        <label class="drop-zone" for="image-input">
+          <span class="upload-icon" aria-hidden="true">↑</span>
+          <strong id="image-file-name">Choose an image</strong>
+          <span>PNG, JPEG or WebP · up to 20 MB</span>
+          <input id="image-input" type="file" accept="image/png,image/jpeg,image/webp" required>
+        </label>
+        <label class="consent-control"><input id="image-consent" name="consent" type="checkbox" value="true" required><span>I agree to send this image to remove.bg for background removal. The image will be processed under <a href="https://www.remove.bg/privacy" target="_blank" rel="noopener noreferrer">remove.bg’s privacy policy</a>.</span></label>
+        <div class="form-actions">
+          <p class="field-hint">The result is previewed below. Download it when you’re ready.</p>
+          <button class="button button-primary" type="submit"><span class="button-label">Remove background</span><span class="spinner" hidden></span></button>
+        </div>
+      </form>
+      <div id="image-result" class="result-slot" aria-live="polite"></div>
+    </section>
+    {% endif %}
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</body>
+</html>
